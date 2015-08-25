@@ -2,7 +2,6 @@ import time
 import re
 from libmproxy.flow import FlowWriter
 from libmproxy.script import concurrent
-from tasks import *
 import requests,json
 #from libmproxy.protocol.http import decoded
 DEBUG="EBUG2"
@@ -17,10 +16,10 @@ SQLI_GET_HAVE_CHECKED_URLS=[]
 SSRF_SITE="113.251.171.47"
 ######options check which######
 ENABLE_CSRF=0
-ENABLE_XXE=1
+ENABLE_XXE=0
 ENABLE_FILE_INCLUDE=0
-ENABLE_SSRF=1
-ENABLE_JSONP=1
+ENABLE_SSRF=0
+ENABLE_JSONP=0
 ENABLE_SQLI=1
 def url_exclude(url):
 	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm"]
@@ -29,7 +28,7 @@ def url_exclude(url):
 			return 1
 	return 0
 def url_include(url):
-	filter_keywords=["chinaso.com"]
+	filter_keywords=[]
 	for keyword in filter_keywords:
 		if url.find(keyword)==-1:
 			return 1
@@ -158,7 +157,7 @@ def request(context, flow):
 				#add this url to SQLI_GET_HAVE_HECEKD_URLS
 				names=request.get_query().keys()
 				names.sort()
-				SQLI_GET_HAVE_CHECKED_URLS.append(request.url.split("?")[0]+str(names))
+				#SQLI_GET_HAVE_CHECKED_URLS.append(request.url.split("?")[0]+str(names))
 				#print SQLI_GET_HAVE_CHECKED_URLS
 				#send to celery
 				cookie=""
@@ -168,8 +167,9 @@ def request(context, flow):
 				if len(request.headers['referer'])>0:
 					referer=request.headers['referer'][0]
 				args = {'args': [request.url,cookie,referer,"mitm-test-for-get"]}
-				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.add", data=json.dumps(args))
-				resp = sqlmappath.delay(request.url,cookie,referer,"mitm-test-for-get")
+				resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,"mitm-test-for-get")
+				print "push ",resp
 			if request.method=="POST" and chongfu(request,SQLI_POST_HAVE_CHECKED_URLS):
 				#add this to SQLI_POST_HAVE_CHECKED_URLS
 				names=request.get_query().keys()
@@ -183,8 +183,9 @@ def request(context, flow):
 					referer=request.headers['referer'][0]
 				data=request.content
 				args = {'args': [request.url,cookie,referer,data]}
-				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.add", data=json.dumps(args))
-				resp = sqlmappath.delay(request.url,cookie,referer,data)
+				resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,data)
+				print "push ",resp
 			
 def response(context,flow):
 	response=flow.response
@@ -212,3 +213,4 @@ def response(context,flow):
 		if ENABLE_JSONP:
 			if "callback" in request.url:
 					output(JSONP_FOUND_URLS,request,"JSONP",context)
+
