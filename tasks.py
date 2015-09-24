@@ -73,7 +73,7 @@ def sqlmap_dispath(url,cookie,referer,data):
 	task_result=requests.get(SQLMAPAPI_URL+"/scan/"+task_id+"/data")
 	print task_result.json()
 	#存在注入,存进数据库中
-	if task_result.json()['data']!="[]":
+	if task_result.json()['data']!=[]:
 		mysql=Database()
 		mysql.insert("insert into sqlmap_result(taskid,result,url,cookie,referer,data) values('%s','%s','%s','%s','%s','%s')"%("NULL",task_result.json()['data'],url,cookie,referer,data))
 		return task_result.json()['data']
