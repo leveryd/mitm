@@ -20,10 +20,10 @@ ENABLE_CSRF=1
 ENABLE_XXE=1
 ENABLE_FILE_INCLUDE=0
 ENABLE_SSRF=1
-ENABLE_JSONP=0
-ENABLE_SQLI=0
+ENABLE_JSONP=1
+ENABLE_SQLI=1
 def url_exclude(url):
-	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm","google.com.hk"]
+	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm","google.com.hk","xcxsxrxf=1","http://api.share.baidu.com"]
 	for keyword in filter_keywords:
 		if url.find(keyword)!=-1:
 			return 1
@@ -110,17 +110,19 @@ def CSRF_check(request,context):
 		if p(["update","edit","add","delete","info","message","action","act"],str(request.get_query().keys())+request.content):
 			#request.headers['cookie']={'cookie=testfortest'}
 			output(CSRF_FOUND_URLS,request,"CSRF",context)
-			#https content
+			#https content打印不出来
 			if request.url.startswith("http://"):
 				print(request.content)
 	#		context.replay_request(f,block=True)
 		#否则判断相应中是否有关键字
-		else:
-			#different url
-			if len(request.get_query())==0:
-				request.url=request.url+"?xcxsxrxf=1"
-			else:
-				request.url=request.url+"&xcxsxrxf=1"
+		#else:
+		#	#different url
+		#	if len(request.get_query())==0:
+		#		request.url=request.url+"?xcxsxrxf=1"
+		#	else:
+		#		request.url=request.url+"&xcxsxrxf=1"
+def keys(request):
+	return request.get_query().keys()
 				
 @concurrent
 def request(context, flow):
@@ -147,10 +149,6 @@ def request(context, flow):
 					d_print(f.request.url,2)
 					context.replay_request(f)
 					output(SSRF_FOUND_URLS,request,"SSRF",context)
-		#CSRF check
-		if ENABLE_CSRF:
-			if len(request.headers['user-agent'])>0 and p(["mozilla","firefox","ie"],request.headers['user-agent'][0]):
-				CSRF_check(request,context)
 	        if request.method=="POST":
 			#if ENABLE_SSRF:
 			#	print dir(request)
@@ -158,7 +156,8 @@ def request(context, flow):
 		if ENABLE_SQLI: 
 			#GET request,may not send request to php,asp,jsp,so we need to determine
 			#POST request,it must be sent to a web server script
-			if request.method=="GET" and chongfu(request,SQLI_GET_HAVE_CHECKED_URLS) and php_file_include(request.get_path_components()):
+			#判断GET请求是否有参数，没参数就不要浪费sqlmapapi时间了
+			if request.method=="GET" and chongfu(request,SQLI_GET_HAVE_CHECKED_URLS) and php_file_include(request.get_path_components()) and len(keys(request))>0:
 				#print request.headers
 				#print type(request.headers)
 				#add this url to SQLI_GET_HAVE_HECEKD_URLS
@@ -176,7 +175,7 @@ def request(context, flow):
 				args = {'args': [request.url,cookie,referer,"mitm-test-for-get"]}
 				resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,"mitm-test-for-get")
-				print "push ",resp
+				#print "push ",resp
 			if request.method=="POST" and chongfu(request,SQLI_POST_HAVE_CHECKED_URLS):
 				#add this to SQLI_POST_HAVE_CHECKED_URLS
 				names=request.get_query().keys()
@@ -202,15 +201,15 @@ def response(context,flow):
 	if url_exclude(request.url)==0 and url_include(request.host)==0:
 		#print request.host,request.url
 		if ENABLE_CSRF:
-			if "xcxsxrxf=1" in flow.request.url:
-				#response.decode()
-				d_print("CSRF Request url Debug:")
-				d_print(flow.request.url)
-				d_print("CSRF Response content Debug:")
-				d_print(response.content)
-				#CSRF response keywords.
-				if p(["success","fail","data","msg","成功","失败","返回"],response.content):
-					output(CSRF_FOUND_URLS,flow.request,"CSRF response",context)
+			#response.decode()
+			d_print("CSRF Request url Debug:")
+			d_print(flow.request.url)
+			d_print("CSRF Response content Debug:")
+			d_print(response.content)
+			#CSRF response keywords.
+			if p(["success","fail","data","msg","成功","失败","返回"],response.content):
+				if len(request.headers['user-agent'])>0 and p(["mozilla","firefox","ie"],request.headers['user-agent'][0]):
+					CSRF_check(request,context)
 		if ENABLE_XXE:
 			if "content-type" in request.headers.keys():
 				if len(request.headers["content-type"])>1:
@@ -221,6 +220,6 @@ def response(context,flow):
 					print request.headers
 					print response.content
 		if ENABLE_JSONP:
-			if "callback" in request.url:
+			if p(["callback","json"],request.url):
 					output(JSONP_FOUND_URLS,request,"JSONP",context)
 
