@@ -206,7 +206,8 @@ def response(context,flow):
 			if "content-type" in request.headers.keys():
 				if len(request.headers["content-type"])>1:
 					print "two content-type founds"
-				if p(["xml","json"],request.headers["content-type"][0]):
+				#xml,json   不选json，是因为json相对来说误报有点高，需要手工验证次数太多，可以考虑以后添加
+				if p(["xml"],request.headers["content-type"][0]):
 					output(XXE_FOUND_URLS,request,"XXE",context)
 					print "XXE RESPONSE"
 					print request.headers
