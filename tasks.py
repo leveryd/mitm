@@ -3,6 +3,7 @@ from celery import Celery,platforms
 from time import sleep
 import requests,json
 import MySQLdb
+import base64
 
 SQLMAPAPI_URL="http://127.0.0.1:9999"
 TASK_NEW_URL=SQLMAPAPI_URL+"/task/new"
