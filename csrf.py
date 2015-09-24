@@ -18,9 +18,9 @@ SSRF_SITE="113.251.171.47"
 ENABLE_CSRF=0
 ENABLE_XXE=0
 ENABLE_FILE_INCLUDE=0
-ENABLE_SSRF=0
+ENABLE_SSRF=1
 ENABLE_JSONP=0
-ENABLE_SQLI=1
+ENABLE_SQLI=0
 def url_exclude(url):
 	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm"]
 	for keyword in filter_keywords:
@@ -107,7 +107,8 @@ def CSRF_check(request,context):
 	else:
 		if p(["update","edit","add","delete","info","message","action"],request.url+request.content):
 			#request.headers['cookie']={'cookie=testfortest'}
-			output(CSRF_FOUND_URLS,request,"CSRF",context)
+			#output(CSRF_FOUND_URLS,request,"CSRF",context)
+			print "maybe CSRF",request.url
 			#https content
 			if request.url.startswith("http://"):
 				print(request.content)
@@ -137,6 +138,7 @@ def request(context, flow):
 			#SSRF
 			if ENABLE_SSRF:
 				#not will be xxx.com/a.gif?wap=xxx.com
+				#not check POST
 				if p(["url","domain","share","wap","link","src","source","target","3g","display","u"],str(request.get_query().keys())) and php_file_include(request.get_path_components()):
 					f=context.duplicate_flow(flow)
 					f.request.url=f.request.url.replace(r,SSRF_SITE)+"&xsxsxrxf=1"
@@ -199,13 +201,13 @@ def response(context,flow):
 				response.decode()
 				d_print(flow.request.url)
 				#CSRF response keywords.
-				if p(["success","fail","data","msg"],response.content):
+				if p(["success","fail","data","msg","成功","失败","返回"],response.content):
 					output(CSRF_FOUND_URLS,flow.request,"CSRF response",context)
 		if ENABLE_XXE:
 			if "content-type" in request.headers.keys():
 				if len(request.headers["content-type"])>1:
 					print "two content-type founds"
-				if p(["xml"],request.headers["content-type"][0]):
+				if p(["xml","json"],request.headers["content-type"][0]):
 					output(XXE_FOUND_URLS,request,"XXE",context)
 					print "XXE RESPONSE"
 					print request.headers
