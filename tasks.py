@@ -1,3 +1,4 @@
+#coding:utf-8
 from celery import Celery,platforms
 from time import sleep
 import requests,json
