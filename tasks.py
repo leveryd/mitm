@@ -58,9 +58,9 @@ def sqlmap_dispath(url,cookie,referer,data):
 	task_new=requests.get(TASK_NEW_URL)
 	task_id=task_new.json()["taskid"]
 	cookie=base64.decodestring(cookie)
-	if data!="mitm-for-test":
+	if data!="mitm-test-for-get":
 		data=base64.decodestring(data)
-	if data!="mitm-for-test":
+	if data!="mitm-test-for-get":
 		requests.post(SQLMAPAPI_URL+"/scan/"+task_id+"/start",data=json.dumps({'url':url,"cookie":cookie,"referer":referer,"data":data}),headers={"content-type":"application/json"})
 	else:
 		requests.post(SQLMAPAPI_URL+"/scan/"+task_id+"/start",data=json.dumps({'url':url,"cookie":cookie,"referer":referer}),headers={"content-type":"application/json"})
