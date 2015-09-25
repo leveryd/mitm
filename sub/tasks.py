@@ -14,7 +14,7 @@ platforms.C_FORCE_ROOT = True
 
 app.conf.update(
         CELERY_IMPORTS = ("tasks", ),
-        BROKER_URL = 'redis://203.195.211.242:8090/0',
+        BROKER_URL = 'redis://203.195.211.242:9001/0',
         #BROKER_URL = 'redis://127.0.0.1:6379/0',
         #CELERY_RESULT_BACKEND = 'db+mysql://root:exp123@127.0.0.1:3306/test',
         CELERY_TASK_SERIALIZER='json',
