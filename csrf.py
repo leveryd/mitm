@@ -6,7 +6,9 @@ from libmproxy.script import concurrent
 import requests,json
 import base64
 #from libmproxy.protocol.http import decoded
-DEBUG="DEBUG2"
+#DEBUG2打印已有URL LIST
+#DEBUG1打印调试信息
+DEBUG="DEBUG3"
 CSRF_FOUND_URLS=[]
 XXE_FOUND_URLS=[]
 SSRF_FOUND_URLS=[]
@@ -21,7 +23,7 @@ ENABLE_CSRF=1
 ENABLE_XXE=1
 ENABLE_FILE_INCLUDE=0
 ENABLE_SSRF=1
-ENABLE_JSONP=1
+ENABLE_JSONP=0
 ENABLE_SQLI=1
 def url_exclude(url):
 	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm","google.com.hk","xcxsxrxf=1","http://api.share.baidu.com"]
@@ -183,7 +185,7 @@ def request(context, flow):
 				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				resp = requests.post("http://203.195.211.242:9000/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,data)
-				print "push ",resp
+				#print "push ",resp
 			
 def response(context,flow):
 	response=flow.response
@@ -231,7 +233,7 @@ def response(context,flow):
 					d_print(f.request.url,2)
 					context.replay_request(f)
 					#页面关键字有待补充，正则估计会非常慢
-					if p_re(["检[ \t\n\x0B\f\r]{0,}查","检[ \t\n\x0B\f\r]{0,}测","扫[ \t\n\x0B\f\r]{0,}描","搜[ \t\n\x0B\f\r]{0,}索"],reponse.content):
+					if p_re(["检[ \t\n\x0B\f\r]{0,}查","检[ \t\n\x0B\f\r]{0,}测","扫[ \t\n\x0B\f\r]{0,}描","搜[ \t\n\x0B\f\r]{0,}索"],response.content):
 						output(SSRF_FOUND_URLS,request,"SSRF",context)
 						
 
