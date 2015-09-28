@@ -229,3 +229,229 @@ ConnectionError: Error 110 connecting 203.195.211.242:8090. Connection timed out
 [2015-09-25 14:37:10,200: WARNING/Worker-1] /home/ubuntu/mitm/subDomainsBrute/
 [2015-09-25 14:37:10,220: WARNING/Worker-1] /home/ubuntu/mitm/subDomainsBrute/
 [I 150925 14:40:10 command:85] SIGTERM detected, shutting down
+[2015-09-25 14:54:13,798: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 15:02:35,939: WARNING/Worker-1] /home/ubuntu/mitm/subDomainsBrute/
+[2015-09-25 15:02:35,949: CRITICAL/MainProcess] Couldn't ack u'616c8e1c-08e8-479b-849a-4c3f85f3218f', reason:ConnectionError('Error 111 connecting 203.195.211.242:8090. Connection refused.',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 93, in ack_log_error
+    self.ack()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 88, in ack
+    self.channel.basic_ack(self.delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/virtual/__init__.py", line 566, in basic_ack
+    self.qos.ack(delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 154, in ack
+    self._remove_from_indices(delivery_tag).execute()
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1821, in execute
+    return execute(conn, stack, raise_on_error)
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1706, in _execute_transaction
+    connection.send_packed_command(all_cmds)
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 283, in send_packed_command
+    self.connect()
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 231, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 111 connecting 203.195.211.242:8090. Connection refused.
+[2015-09-25 15:02:36,132: ERROR/MainProcess] Task tasks.subbrute_dispath[9c05b598-5dfa-49c8-9bd7-77ad74b23a9a] raised unexpected: OSError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/celery/app/trace.py", line 240, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/celery/app/trace.py", line 438, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/ubuntu/mitm/tasks.py", line 94, in subbrute_dispath
+  File "/usr/lib/python2.7/subprocess.py", line 710, in __init__
+    errread, errwrite)
+  File "/usr/lib/python2.7/subprocess.py", line 1327, in _execute_child
+    raise child_exception
+OSError: [Errno 2] No such file or directory: '/home/ubuntu/mitm/subDomainsBrute/'
+[2015-09-25 15:02:36,133: WARNING/Worker-1] /home/ubuntu/mitm/subDomainsBrute/
+[2015-09-25 15:02:36,143: CRITICAL/MainProcess] Couldn't ack u'118cb17c-7956-4bfc-b876-29d445f20999', reason:ConnectionError('Error 111 connecting 203.195.211.242:8090. Connection refused.',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 93, in ack_log_error
+    self.ack()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 88, in ack
+    self.channel.basic_ack(self.delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/virtual/__init__.py", line 566, in basic_ack
+    self.qos.ack(delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 154, in ack
+    self._remove_from_indices(delivery_tag).execute()
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1821, in execute
+    return execute(conn, stack, raise_on_error)
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1706, in _execute_transaction
+    connection.send_packed_command(all_cmds)
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 283, in send_packed_command
+    self.connect()
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 231, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 111 connecting 203.195.211.242:8090. Connection refused.
+[2015-09-25 15:02:36,158: ERROR/MainProcess] Task tasks.subbrute_dispath[9d8ebbc3-c17e-4f61-8cdd-cf7ba165b0f9] raised unexpected: OSError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/celery/app/trace.py", line 240, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/celery/app/trace.py", line 438, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/ubuntu/mitm/tasks.py", line 94, in subbrute_dispath
+  File "/usr/lib/python2.7/subprocess.py", line 710, in __init__
+    errread, errwrite)
+  File "/usr/lib/python2.7/subprocess.py", line 1327, in _execute_child
+    raise child_exception
+OSError: [Errno 2] No such file or directory: '/home/ubuntu/mitm/subDomainsBrute/'
+[2015-09-25 15:02:36,177: CRITICAL/MainProcess] Couldn't ack u'2fb7fadc-8cd4-4808-9646-b35758b192fa', reason:ConnectionError('Error 111 connecting 203.195.211.242:8090. Connection refused.',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 93, in ack_log_error
+    self.ack()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/message.py", line 88, in ack
+    self.channel.basic_ack(self.delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/virtual/__init__.py", line 566, in basic_ack
+    self.qos.ack(delivery_tag)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 154, in ack
+    self._remove_from_indices(delivery_tag).execute()
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1821, in execute
+    return execute(conn, stack, raise_on_error)
+  File "/usr/lib/python2.7/dist-packages/redis/client.py", line 1706, in _execute_transaction
+    connection.send_packed_command(all_cmds)
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 283, in send_packed_command
+    self.connect()
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 231, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 111 connecting 203.195.211.242:8090. Connection refused.
+[2015-09-25 15:02:36,774: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/consumer.py", line 278, in start
+    blueprint.start(self)
+  File "/usr/local/lib/python2.7/dist-packages/celery/bootsteps.py", line 123, in start
+    step.start(parent)
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/consumer.py", line 821, in start
+    c.loop(*c.loop_args())
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/loops.py", line 70, in asynloop
+    next(loop)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/async/hub.py", line 267, in create_loop
+    tick_callback()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 943, in on_poll_start
+    cycle_poll_start()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 302, in on_poll_start
+    self._register_LISTEN(channel)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 292, in _register_LISTEN
+    self._register(channel, channel.subclient, 'LISTEN')
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 268, in _register
+    client.connection.connect()
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 231, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 111 connecting 203.195.211.242:8090. Connection refused.
+[2015-09-25 15:02:36,776: WARNING/MainProcess] Restoring 3 unacknowledged message(s).
+[2015-09-25 15:02:36,834: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 2.00 seconds...
+
+[2015-09-25 15:02:38,844: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 4.00 seconds...
+
+[2015-09-25 15:02:42,857: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 6.00 seconds...
+
+[2015-09-25 15:02:48,871: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 8.00 seconds...
+
+[2015-09-25 15:02:56,886: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 10.00 seconds...
+
+[2015-09-25 15:03:06,903: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 12.00 seconds...
+
+[2015-09-25 15:03:18,923: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 14.00 seconds...
+
+[2015-09-25 15:03:32,942: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 16.00 seconds...
+
+[2015-09-25 15:03:48,965: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 18.00 seconds...
+
+[2015-09-25 15:04:06,988: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 20.00 seconds...
+
+[2015-09-25 15:04:27,011: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 22.00 seconds...
+
+[2015-09-25 15:04:49,042: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 24.00 seconds...
+
+[2015-09-25 15:05:13,072: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 26.00 seconds...
+
+[2015-09-25 15:05:39,104: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 28.00 seconds...
+
+[2015-09-25 15:06:07,137: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 30.00 seconds...
+
+[2015-09-25 15:06:37,169: ERROR/MainProcess] consumer: Cannot connect to redis://203.195.211.242:8090/0: Error 111 connecting 203.195.211.242:8090. Connection refused..
+Trying again in 32.00 seconds...
+
+[2015-09-25 15:11:17,334: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 15:12:20,494: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 15:16:35,797: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 15:19:39,650: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 15:20:51,069: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-25 16:20:04,845: WARNING/Worker-1] {u'data': [], u'success': True, u'error': []}
+[2015-09-28 04:15:05,584: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/consumer.py", line 278, in start
+    blueprint.start(self)
+  File "/usr/local/lib/python2.7/dist-packages/celery/bootsteps.py", line 123, in start
+    step.start(parent)
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/consumer.py", line 821, in start
+    c.loop(*c.loop_args())
+  File "/usr/local/lib/python2.7/dist-packages/celery/worker/loops.py", line 70, in asynloop
+    next(loop)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/async/hub.py", line 267, in create_loop
+    tick_callback()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 943, in on_poll_start
+    cycle_poll_start()
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 300, in on_poll_start
+    self._register_BRPOP(channel)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 283, in _register_BRPOP
+    self._register(*ident)
+  File "/usr/local/lib/python2.7/dist-packages/kombu/transport/redis.py", line 268, in _register
+    client.connection.connect()
+  File "/usr/lib/python2.7/dist-packages/redis/connection.py", line 231, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 110 connecting 203.195.211.242:8090. Connection timed out.
+[2015-09-28 18:13:22,397: WARNING/MainProcess] /usr/local/lib/python2.7/dist-packages/celery/apps/worker.py:161: CDeprecationWarning: 
+Starting from version 3.2 Celery will refuse to accept pickle by default.
+
+The pickle serializer is a security concern as it may give attackers
+the ability to execute any command.  It's important to secure
+your broker from unauthorized access when using pickle, so we think
+that enabling pickle should require a deliberate action and not be
+the default choice.
+
+If you depend on pickle then you should set a setting to disable this
+warning and to be sure that everything will continue working
+when you upgrade to Celery 3.2::
+
+    CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+
+You must only enable the serializers that you will actually use.
+
+
+  warnings.warn(CDeprecationWarning(W_PICKLE_DEPRECATED))
+[2015-09-28 18:13:23,651: WARNING/MainProcess] celery@VM-146-46-ubuntu ready.
+[I 150928 18:19:08 command:113] Visit me at http://localhost:9010
+[I 150928 18:19:08 command:115] Broker: redis://203.195.211.242:8090/0
+[I 150928 18:19:08 command:118] Registered tasks: 
+    ['celery.backend_cleanup',
+     'celery.chain',
+     'celery.chord',
+     'celery.chord_unlock',
+     'celery.chunks',
+     'celery.group',
+     'celery.map',
+     'celery.starmap',
+     'tasks.sqlmap_dispath']
+[I 150928 18:19:08 mixins:225] Connected to redis://203.195.211.242:8090/0
+[I 150928 18:23:40 web:1908] 200 GET / (106.39.10.162) 219.20ms
+[I 150928 18:23:40 web:1908] 200 GET / (61.151.218.119) 11.32ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/bootstrap-responsive.css?v=702e8485242b3ae5b4ce75a5ede13acb (106.39.10.162) 19.19ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/rickshaw.min.css?v=48a108292e153ef3cfb53c32283b3d2c (106.39.10.162) 0.72ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/jquery-ui.css?v=11ba5be990454fbbc957fcdf55e339ca (106.39.10.162) 0.77ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/bootstrap-datetimepicker.min.css?v=7468d8a6368bc2a64ad76bce62b9beb2 (106.39.10.162) 0.64ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/flower.css?v=c956fd18aac1e617570f5366d11ad4fd (106.39.10.162) 0.64ms
+[I 150928 18:23:41 web:1908] 200 GET /static/css/bootstrap.css?v=7b4cd90ae3b1616f1cf0b93bf5a7769b (106.39.10.162) 743.58ms
