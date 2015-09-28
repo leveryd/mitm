@@ -13,7 +13,7 @@ SQLI_FOUND_URLS=[]
 SQLI_POST_HAVE_CHECKED_URLS=[]
 SQLI_GET_HAVE_CHECKED_URLS=[]
 ######options check which######
-ENABLE_SSRF=1
+ENABLE_SQLI=1
 def url_exclude(url):
 	filter_keywords=["js","css","gif","jpeg","png","swf","jpg","ico","http://www.google-analytics.com","http://192.168.0.1","xsxsxrxf=1","xcxsxrxf=1","http://pagead2.googlesyndication.com","http://googleads.g.doubleclick.net","http://pos.baidu.com","http://z8.cnzz.com/stat.htm","google.com.hk","xcxsxrxf=1","http://api.share.baidu.com"]
 	for keyword in filter_keywords:
@@ -122,7 +122,7 @@ def request(context, flow):
 					referer=request.headers['referer'][0]
 				args = {'args': [request.url,base64.encodestring(cookie),referer,"mitm-test-for-get"]}
 				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
-				resp = requests.post("http://203.195.211.242:9000/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				resp = requests.post("http://203.195.211.242:9010/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,"mitm-test-for-get")
 				#print "push ",resp
 			if request.method=="POST" and chongfu(request,SQLI_POST_HAVE_CHECKED_URLS):
@@ -139,7 +139,7 @@ def request(context, flow):
 				data=request.content
 				args = {'args': [request.url,base64.encodestring(cookie),referer,base64.encodestring(data)]}
 				#resp = requests.post("http://localhost:5555/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
-				resp = requests.post("http://203.195.211.242:9000/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
+				resp = requests.post("http://203.195.211.242:9010/api/task/async-apply/tasks.sqlmap_dispath", data=json.dumps(args))
 				#resp = tasks.sqlmap_dispath.delay(request.url,cookie,referer,data)
 				#print "push ",resp
 			
